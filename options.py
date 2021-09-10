@@ -5,7 +5,7 @@ from basic_functionalities import surface_size, screen, font64, font96, draw_boa
                                   pink_color, Players
 
 
-def draw_options_state(players):
+def draw_options_state(players: Players):
 
     text_X1 = 240  # 1/3 of surface
     text_X2 = 480  # 2/3 od surface
@@ -61,8 +61,9 @@ def draw_options_state(players):
     text_center = text.get_rect(center=(text_X2, text_Y + offset_Y * 3))
     screen.blit(text, text_center)
 
+
 # Loop of OPTIONS state
-def options_loop(players):
+def options_loop(players: Players):
     end_of_loop = False
 
     draw_board()  # Reset screen

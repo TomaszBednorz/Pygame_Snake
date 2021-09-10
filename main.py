@@ -25,7 +25,6 @@ class GameStates(IntEnum):
     EXIT_GAME = 5
 
 
-
 # This function draw options to choose in the main menu board
 def draw_menu_options(state: GameStates):
     states_txt = ["Play game", "Results", "Options", "Credits", "Exit game"]
