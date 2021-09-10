@@ -5,7 +5,7 @@ Small home project of snake game. Project is written in Python language with hel
 
 ## Functionalities
 - User can choose game mode for one or two players
-- User can choose nickname (between 3 to 10 letters)
+- User can choose nickname (max 10 letters)
 - User can check results of 5 best games in both modes
 - User can pause the game
 - Game is a little bit harder every a few seconds
