@@ -5,11 +5,23 @@ from basic_functionalities import surface_size, screen, font32, font96, draw_boa
 
 
 def draw_credits_state():
-    credits_txt = "Snake icon made by Freepik from www.flaticon.com"
+    credits_txt = ["Snake icon made by Freepik from www.flaticon.com",
+                   "Arrows icon made by Smashicons from www.flaticon.com",
+                   "AWSD icon made by Smashicons from www.flaticon.com"]
     exit_txt = "Exit"
 
-    text = font32.render(credits_txt, True, black_color)
+    offset_Y = 120
+
+    text = font32.render(credits_txt[0], True, black_color)
     text_center = text.get_rect(center=(surface_size / 2, surface_size / 6))
+    screen.blit(text, text_center)
+
+    text = font32.render(credits_txt[1], True, black_color)
+    text_center = text.get_rect(center=(surface_size / 2, surface_size / 6 + offset_Y))
+    screen.blit(text, text_center)
+
+    text = font32.render(credits_txt[2], True, black_color)
+    text_center = text.get_rect(center=(surface_size / 2, surface_size / 6 + 2 * offset_Y))
     screen.blit(text, text_center)
 
     text = font96.render(exit_txt, True, red_color)
