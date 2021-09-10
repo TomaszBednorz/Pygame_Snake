@@ -1,7 +1,7 @@
 import pygame
 import sys
 
-from basic_functionalities import cell_size, cells_on_surface, surface_size, screen, font32, font96, draw_board, red_color, black_color
+from basic_functionalities import surface_size, screen, font32, font96, draw_board, red_color, black_color
 
 
 def draw_credits_state():
@@ -15,6 +15,7 @@ def draw_credits_state():
     text = font96.render(exit_txt, True, red_color)
     text_center = text.get_rect(center=(surface_size / 2, surface_size - surface_size / 6))
     screen.blit(text, text_center)
+
 
 # Loop of CREDITS state
 def credits_loop():
