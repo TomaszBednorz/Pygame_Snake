@@ -12,7 +12,7 @@ Small home project of snake game. Project is written in Python language with hel
 
 ## TODO list
 - [x] Main menu implementation
-- [ ] Choosing a nickname
+- [x] Choosing a nickname
 - [ ] Implementation of a game for one players
 - [ ] Implementation of a game for two players
 - [ ] Snake & Apple implementation
