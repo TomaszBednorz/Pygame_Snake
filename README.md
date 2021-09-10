@@ -18,7 +18,7 @@ Small home project of snake game. Project is written in Python language with hel
 - [ ] Snake & Apple implementation
 - [ ] The board after the game
 - [ ] Best results implementation
-- [ ] Implementation of a panel with game options
+- [x] Implementation of a panel with game options
 - [x] Credits panel implementation
 - [ ] Music & Graphics
 - [ ] Comments actualization && bug revision
