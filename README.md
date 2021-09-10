@@ -11,14 +11,15 @@ Small home project of snake game. Project is written in Python language with hel
 - Game is a little bit harder every a few seconds
 
 ## TODO list
-- [ ] Main menu implementation
+- [x] Main menu implementation
 - [ ] Choosing a nickname
 - [ ] Implementation of a game for one players
 - [ ] Implementation of a game for two players
 - [ ] Snake & Apple implementation
 - [ ] The board after the game
 - [ ] Best results implementation
-- [ ] Implementation of a panel with game rules
+- [ ] Implementation of a panel with game options
+- [x] Credits panel implementation
 - [ ] Music & Graphics
 - [ ] Comments actualization && bug revision
 
