@@ -19,11 +19,17 @@ font32 = pygame.font.Font('Font/Ballerick.otf', 32)
 red_color = pygame.Color(225, 0, 0)
 black_color = pygame.Color(0, 0, 0)
 pink_color = pygame.Color(225, 0, 126)
+light_green_color = pygame.Color((0, 221, 0))
+dark_green_color = pygame.Color((0, 94, 0))
+dark_blue_color = pygame.Color((0, 0, 144))
+orange_color = pygame.Color((248, 65, 73))
+
 
 # Players in game
 class Players(IntEnum):
     ONE_PLAYER = 1
     TWO_PLAYER = 2
+
 
 # This function draw basic board
 # 1. Brown sides
@@ -50,15 +56,14 @@ def draw_board():
     chunks_in_col = 5  # Number of chunks in rows
     chunk_height = 4 * cell_size
     chunk_width = 4 * cell_size
-    chunk_color_1 = pygame.Color((0, 221, 0))  # Light green
-    chunk_color_2 = pygame.Color((0, 94, 0))  # Dark green
+
     for i in range(chunks_in_row):
         for j in range(chunks_in_col):
             rect = pygame.Rect(start_square.x * cell_size, start_square.y * cell_size, chunk_width, chunk_height)
             if (i + j) % 2 == 0:
-                pygame.draw.rect(screen, chunk_color_1, rect)
+                pygame.draw.rect(screen, light_green_color, rect)
             else:
-                pygame.draw.rect(screen, chunk_color_2, rect)
+                pygame.draw.rect(screen, dark_green_color, rect)
 
             if start_square.x < 2 + chunks_in_row * 3 - 1:
                 start_square.x += 4

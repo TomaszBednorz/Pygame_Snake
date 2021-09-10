@@ -64,14 +64,14 @@ if __name__ == "__main__":
                 if event.key == pygame.K_DOWN:  # Go down in main menu
                     if game_state < GameStates.EXIT_GAME:
                         game_state += 1
-
-                if event.key == pygame.K_UP:  # Go up in main menu
+                elif event.key == pygame.K_UP:  # Go up in main menu
                     if game_state > GameStates.PLAY_GAME:
                         game_state -= 1
-
-                if event.key == pygame.K_RETURN:
+                elif event.key == pygame.K_ESCAPE:  # Quit game
+                    game_enable = False
+                elif event.key == pygame.K_RETURN:
                     if game_state == GameStates.PLAY_GAME:
-                        game_loop()
+                        game_loop(players)
                     elif game_state == GameStates.RESULTS:
                         pass
                     elif game_state == GameStates.OPTIONS:

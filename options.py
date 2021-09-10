@@ -1,7 +1,8 @@
 import pygame
 import sys
 
-from basic_functionalities import surface_size, screen, font32, font64, font96, draw_board, red_color, black_color, pink_color, Players
+from basic_functionalities import surface_size, screen, font64, font96, draw_board, red_color, black_color, \
+                                  pink_color, Players
 
 
 def draw_options_state(players):
