@@ -4,8 +4,9 @@ from enum import IntEnum
 pygame.init()  # Pygame library initialization at the beginning
 
 # Local imports
-from basic_functionalities import cell_size, surface_size, screen, font96, draw_board, red_color, black_color
+from basic_functionalities import cell_size, surface_size, screen, font96, draw_board, red_color, black_color, Players
 from game import game_loop
+from options import options_loop
 from credits import credits_loop
 
 
@@ -19,14 +20,15 @@ pygame.display.set_icon(icon)
 class GameStates(IntEnum):
     PLAY_GAME = 1
     RESULTS = 2
-    GAME_RULES = 3
+    OPTIONS = 3
     CREDITS = 4
     EXIT_GAME = 5
 
 
+
 # This function draw options to choose in the main menu board
 def draw_menu_options(state: GameStates):
-    states_txt = ["Play game", "Results", "Game rules", "Credits", "Exit game"]
+    states_txt = ["Play game", "Results", "Options", "Credits", "Exit game"]
 
     start_x = surface_size / 2
     start_y = cell_size * 4
@@ -45,6 +47,7 @@ def draw_menu_options(state: GameStates):
 
 if __name__ == "__main__":
     game_state = GameStates.PLAY_GAME  # Set beginning  state of game
+    players = Players.ONE_PLAYER  # Set beginning amount of players
 
     draw_board()
     draw_menu_options(game_state)
@@ -71,8 +74,8 @@ if __name__ == "__main__":
                         game_loop()
                     elif game_state == GameStates.RESULTS:
                         pass
-                    elif game_state == GameStates.GAME_RULES:
-                        pass
+                    elif game_state == GameStates.OPTIONS:
+                        players = options_loop(players)
                     elif game_state == GameStates.CREDITS:
                         credits_loop()
                     elif game_state == GameStates.EXIT_GAME:

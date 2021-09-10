@@ -1,5 +1,6 @@
 import pygame
 from pygame.math import Vector2
+from enum import IntEnum
 
 # Dimensions of the screen
 cell_size = 30
@@ -11,13 +12,18 @@ screen = pygame.display.set_mode((surface_size, surface_size))
 
 # Load font
 font96 = pygame.font.Font('Font/Ballerick.otf', 96)
+font64 = pygame.font.Font('Font/Ballerick.otf', 64)
 font32 = pygame.font.Font('Font/Ballerick.otf', 32)
 
 # Colors
 red_color = pygame.Color(225, 0, 0)
 black_color = pygame.Color(0, 0, 0)
+pink_color = pygame.Color(225, 0, 126)
 
-
+# Players in game
+class Players(IntEnum):
+    ONE_PLAYER = 1
+    TWO_PLAYER = 2
 
 # This function draw basic board
 # 1. Brown sides

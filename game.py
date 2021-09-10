@@ -1,12 +1,11 @@
 import pygame
 import sys
 
-#from main import screen, cell_size, surface_size, font
+# from main import screen, cell_size, surface_size, font
 
 
-
-
-
+class Game:
+    pass
 
 
 # Loop of PLAY_GAME state

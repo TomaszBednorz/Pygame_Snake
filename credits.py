@@ -31,7 +31,7 @@ def credits_loop():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:  # Quit the game
                 sys.exit()
-            if event.type == pygame.KEYDOWN:  # Back to main menu
-                if event.key == pygame.K_RETURN:
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_RETURN:  # Back to main menu
                     end_of_loop = True
     # End of the CREDITS loop
