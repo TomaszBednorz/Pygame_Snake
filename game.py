@@ -4,8 +4,8 @@ import random
 from pygame.math import Vector2
 from enum import IntEnum
 
-from basic_functionalities import Players, font96, font64, font32, red_color, black_color, gold_color, silver_color, \
-    brown_color, screen, light_green_color,dark_green_color, dark_blue_color, orange_color, surface_size, cell_size,\
+from basic_functionalities import Players, font96, font64, red_color, black_color, gold_color, silver_color, \
+    brown_color, screen, light_green_color, dark_green_color, dark_blue_color, orange_color, surface_size, cell_size, \
     draw_board, draw_string
 
 
@@ -443,7 +443,9 @@ def game_loop(players: Players):
 
     # New event
     SCREEN_UPDATE = pygame.USEREVENT
-    pygame.time.set_timer(SCREEN_UPDATE, 200)
+    frame_iteration = 0
+    game_speed = 300
+    pygame.time.set_timer(SCREEN_UPDATE, game_speed)
 
     # Start of the PLAY_GAME loop
     while not end_of_loop:
@@ -453,6 +455,11 @@ def game_loop(players: Players):
             if event.type == SCREEN_UPDATE:  # Update game screen
                 if game.game_routine():
                     end_of_loop = True
+                frame_iteration += 1
+                if frame_iteration >= 50 and game_speed > 100:  # Speed will be higher every fifty frames
+                    game_speed -= 10
+                    pygame.time.set_timer(SCREEN_UPDATE, game_speed)
+                    frame_iteration = 0
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:  # Back to main menu
                     end_of_loop = True

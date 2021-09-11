@@ -6,6 +6,7 @@ pygame.init()  # Pygame library initialization at the beginning
 # Local imports
 from basic_functionalities import cell_size, surface_size, screen, font96, draw_board, red_color, black_color, Players
 from game import game_loop
+from results import results_loop
 from options import options_loop
 from credits import credits_loop
 
@@ -72,7 +73,7 @@ if __name__ == "__main__":
                     if game_state == GameStates.PLAY_GAME:
                         game_loop(players)
                     elif game_state == GameStates.RESULTS:
-                        pass
+                        results_loop()
                     elif game_state == GameStates.OPTIONS:
                         players = options_loop(players)
                     elif game_state == GameStates.CREDITS:
