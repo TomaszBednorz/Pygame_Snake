@@ -28,7 +28,7 @@ orange_color = pygame.Color((248, 65, 73))
 # Players in game
 class Players(IntEnum):
     ONE_PLAYER = 1
-    TWO_PLAYER = 2
+    TWO_PLAYERS = 2
 
 
 # This function draw basic board

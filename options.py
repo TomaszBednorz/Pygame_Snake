@@ -52,7 +52,7 @@ def draw_options_state(players: Players):
     text_center = text.get_rect(center=(text_X1, text_Y + offset_Y * 3))
     screen.blit(text, text_center)
 
-    if players == Players.TWO_PLAYER:
+    if players == Players.TWO_PLAYERS:
         current_color = pink_color
     else:
         current_color = black_color
@@ -83,7 +83,7 @@ def options_loop(players: Players):
                     players = Players.ONE_PLAYER
 
                 if event.key == pygame.K_RIGHT:  # 2 players option
-                    players = Players.TWO_PLAYER
+                    players = Players.TWO_PLAYERS
 
                 draw_options_state(players)  # Update screen
 
