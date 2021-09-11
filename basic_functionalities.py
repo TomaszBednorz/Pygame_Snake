@@ -23,6 +23,9 @@ light_green_color = pygame.Color((0, 221, 0))
 dark_green_color = pygame.Color((0, 94, 0))
 dark_blue_color = pygame.Color((0, 0, 144))
 orange_color = pygame.Color((248, 65, 73))
+gold_color = pygame.Color((219, 247, 0))
+silver_color = pygame.Color((216, 223, 219))
+brown_color = pygame.Color((198, 76, 9))
 
 
 # Players in game
@@ -70,3 +73,10 @@ def draw_board():
             else:
                 start_square.x = 2
                 start_square.y += 4
+
+
+# Draw a string on the default screen
+def draw_string(font, string, color, x, y):
+    text = font.render(string, True, color)
+    text_center = text.get_rect(center=(x, y))
+    screen.blit(text, text_center)
