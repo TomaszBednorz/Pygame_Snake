@@ -52,6 +52,9 @@ if __name__ == "__main__":
     draw_board()
     draw_menu_options(game_state)
 
+    intro_sound = pygame.mixer.Sound('Sound/intro.mp3')
+    intro_sound.play()
+
     game_enable = True
 
     # Start of the infinity loop
@@ -71,7 +74,9 @@ if __name__ == "__main__":
                     game_enable = False
                 elif event.key == pygame.K_RETURN:
                     if game_state == GameStates.PLAY_GAME:
+                        intro_sound.stop()
                         game_loop(players)
+                        intro_sound.play()
                     elif game_state == GameStates.RESULTS:
                         results_loop()
                     elif game_state == GameStates.OPTIONS:

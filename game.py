@@ -111,6 +111,11 @@ class Game:
         self.grass_size = 30
         self.grass_number = 20
 
+        # Sounds
+        self.eat_sound = pygame.mixer.Sound('Sound/eat.mp3')
+        self.game_over_sound = pygame.mixer.Sound('Sound/game_over.mp3')
+        self.background_sound = pygame.mixer.Sound('Sound/background.mp3')
+
     def draw_grass(self):
         for i in range(self.grass_number):
             for j in range(self.grass_number):
@@ -125,6 +130,8 @@ class Game:
     def enter_names(self):
         end_of_loop = False
         current_player = Players.ONE_PLAYER  # Player one chooses nickname firstly
+
+        self.background_sound.play()  # Play background sound
 
         while not end_of_loop:
             for event in pygame.event.get():
@@ -213,6 +220,7 @@ class Game:
             self.apples[0].draw()  # Show apple in new position
             snake.grow_up()  # Cover old apple by snake body
             snake.draw()
+            self.eat_sound.play()
         # Apple 2
         if snake.body[-1] == self.apples[1].pos:
             self.points += 1
@@ -220,6 +228,7 @@ class Game:
             self.apples[1].draw()
             snake.grow_up()
             snake.draw()
+            self.eat_sound.play()
 
     def check_snakes_wall_collision(self, snake: Snake):
         # Wall
@@ -279,6 +288,9 @@ class Game:
     def game_over(self):
         draw_board()
         self.draw_grass()  # Clear the screen
+
+        self.game_over_sound.play()  # Play game over sound
+        self.background_sound.stop()  # Disable background sound
 
         if self.player1_name == "":
             self.player1_name = "xyz"
