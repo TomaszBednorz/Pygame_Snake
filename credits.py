@@ -1,32 +1,20 @@
 import pygame
 import sys
 
-from basic_functionalities import surface_size, screen, font32, font96, draw_board, red_color, black_color
+from basic_functionalities import surface_size, screen, font32, font96, draw_board, red_color, black_color, draw_string
 
 
 def draw_credits_state():
     credits_txt = ["Snake icon made by Freepik from www.flaticon.com",
                    "Arrows icon made by Smashicons from www.flaticon.com",
                    "AWSD icon made by Smashicons from www.flaticon.com"]
-    exit_txt = "Exit"
 
     offset_Y = 120
 
-    text = font32.render(credits_txt[0], True, black_color)
-    text_center = text.get_rect(center=(surface_size / 2, surface_size / 6))
-    screen.blit(text, text_center)
-
-    text = font32.render(credits_txt[1], True, black_color)
-    text_center = text.get_rect(center=(surface_size / 2, surface_size / 6 + offset_Y))
-    screen.blit(text, text_center)
-
-    text = font32.render(credits_txt[2], True, black_color)
-    text_center = text.get_rect(center=(surface_size / 2, surface_size / 6 + 2 * offset_Y))
-    screen.blit(text, text_center)
-
-    text = font96.render(exit_txt, True, red_color)
-    text_center = text.get_rect(center=(surface_size / 2, surface_size - surface_size / 6))
-    screen.blit(text, text_center)
+    draw_string(font32, credits_txt[0], black_color, surface_size / 2, surface_size / 6)
+    draw_string(font32, credits_txt[1], black_color, surface_size / 2, surface_size / 6 + offset_Y)
+    draw_string(font32, credits_txt[2], black_color, surface_size / 2, surface_size / 6 + 2 * offset_Y)
+    draw_string(font96, "Exit", red_color, surface_size / 2, surface_size - surface_size / 6)
 
 
 # Loop of CREDITS state
@@ -44,6 +32,6 @@ def credits_loop():
             if event.type == pygame.QUIT:  # Quit the game
                 sys.exit()
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_RETURN:  # Back to main menu
+                if event.key == pygame.K_RETURN or event.key == pygame.K_ESCAPE:  # Back to main menu
                     end_of_loop = True
     # End of the CREDITS loop

@@ -90,7 +90,7 @@ def results_loop():
             if event.type == pygame.QUIT:  # Quit the game
                 sys.exit()
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_RETURN:  # Back to main menu
+                if event.key == pygame.K_RETURN or event.key == pygame.K_ESCAPE:  # Back to main menu
                     end_of_loop = True
                 if event.key == pygame.K_RIGHT:
                     mode = Players.TWO_PLAYERS

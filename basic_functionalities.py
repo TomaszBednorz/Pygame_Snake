@@ -26,6 +26,7 @@ orange_color = pygame.Color((248, 65, 73))
 gold_color = pygame.Color((219, 247, 0))
 silver_color = pygame.Color((216, 223, 219))
 brown_color = pygame.Color((198, 76, 9))
+dark_brown_color = pygame.Color((135, 85, 9))
 
 
 # Players in game
@@ -39,19 +40,12 @@ class Players(IntEnum):
 # 2. Black edges
 # 3. Green board in the center
 def draw_board():
-    # Fill the screen with brown color
-    screen.fill((135, 85, 9))
+    # Fill the screen with dark brown color
+    screen.fill(dark_brown_color)
 
-    # Draw black edges
-    edges_color = pygame.Color((0, 0, 0))  # Black edges
-    rect_1 = pygame.Rect(50, 50, 620, 10)
-    rect_2 = pygame.Rect(50, 50, 10, 620)
-    rect_3 = pygame.Rect(660, 50, 10, 620)
-    rect_4 = pygame.Rect(50, 660, 620, 10)
-    pygame.draw.rect(screen, edges_color, rect_1)
-    pygame.draw.rect(screen, edges_color, rect_2)
-    pygame.draw.rect(screen, edges_color, rect_3)
-    pygame.draw.rect(screen, edges_color, rect_4)
+    # Draw black edges around the game screen
+    rect = pygame.Rect(cell_size * 2 - 10, cell_size * 2 - 10, 20 + cell_size * 20, 20 + cell_size * 20)
+    pygame.draw.rect(screen, black_color, rect)
 
     # Draw the board in 2 different types of green color
     start_square = Vector2(2, 2)
@@ -75,8 +69,8 @@ def draw_board():
                 start_square.y += 4
 
 
-# Draw a string on the default screen
-def draw_string(font, string, color, x, y):
+# Draw a string on the default screen, x and y are the center of the string
+def draw_string(font: pygame.font.Font, string: str, color: pygame.Color, x: int, y: int):
     text = font.render(string, True, color)
     text_center = text.get_rect(center=(x, y))
     screen.blit(text, text_center)

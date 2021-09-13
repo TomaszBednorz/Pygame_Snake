@@ -4,7 +4,8 @@ from enum import IntEnum
 pygame.init()  # Pygame library initialization at the beginning
 
 # Local imports
-from basic_functionalities import cell_size, surface_size, screen, font96, draw_board, red_color, black_color, Players
+from basic_functionalities import cell_size, surface_size, screen, font96, draw_board, red_color, black_color, \
+    Players, draw_string
 from game import game_loop
 from results import results_loop
 from options import options_loop
@@ -36,13 +37,9 @@ def draw_menu_options(state: GameStates):
 
     for i in range(len(states_txt)):
         if i + 1 == state:
-            text = font96.render(states_txt[i], True, red_color)
-            text_center = text.get_rect(center=(start_x, start_y + offset_y * i))
-            screen.blit(text, text_center)
+            draw_string(font96, states_txt[i], red_color, start_x, start_y + offset_y * i)
         else:
-            text = font96.render(states_txt[i], True, black_color)
-            text_center = text.get_rect(center=(start_x, start_y + offset_y * i))
-            screen.blit(text, text_center)
+            draw_string(font96, states_txt[i], black_color, start_x, start_y + offset_y * i)
 
 
 if __name__ == "__main__":

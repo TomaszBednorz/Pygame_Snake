@@ -4,7 +4,7 @@ import random
 from pygame.math import Vector2
 from enum import IntEnum
 
-from basic_functionalities import Players, font96, font64, red_color, black_color, gold_color, silver_color, \
+from basic_functionalities import Players, font96, font64, font32, red_color, black_color, gold_color, silver_color, \
     brown_color, screen, light_green_color, dark_green_color, dark_blue_color, orange_color, surface_size, cell_size, \
     draw_board, draw_string
 
@@ -23,7 +23,7 @@ class Snake:
         self.body = [Vector2(7 * snake_num, 12), Vector2(7 * snake_num, 11), Vector2(7 * snake_num, 10)]
         self.snake_number = snake_num
         self.grass_offset = 60
-        self.change_direction = True  # 1 direction changing per frame
+        self.change_direction = True  # One changing of direction per frame
 
     def draw(self):
         if self.snake_number == Players.ONE_PLAYER:
@@ -64,19 +64,18 @@ class Snake:
             elif new_direction == SnakeDirection.LEFT:
                 if self.direction != Vector2(1, 0):
                     self.direction = Vector2(-1, 0)
-            self.change_direction = False
+            self.change_direction = False  # One changing of direction per frame: disable direction changing
 
     def update_position(self):
         for i in range(len(self.body) - 1):
             self.body[i] = self.body[i + 1]
         self.body[-1] = self.body[-1] + self.direction
-        self.change_direction = True
+        self.change_direction = True  # One changing of direction per frame: enable direction changing
 
     def grow_up(self):
         first_block = self.body[0]  # End of snake tail
         second_block = self.body[1]
         diff = first_block - second_block
-
         self.body.insert(0, self.body[0] + diff)
 
 
@@ -162,24 +161,18 @@ class Game:
                         return False
 
             # 1st player title
-            text = font96.render("Player 1", True, dark_blue_color)
-            text_center = text.get_rect(center=(surface_size / 2, self.grass_start_Y + self.grass_size * 3))
-            screen.blit(text, text_center)
+            draw_string(font96, "Player 1", dark_blue_color, surface_size / 2, self.grass_start_Y + self.grass_size * 3)
 
             # 2nd player title
             if self.players_num == Players.TWO_PLAYERS:
-                text = font96.render("Player 2", True, orange_color)
-                text_center = text.get_rect(center=(surface_size / 2, self.grass_start_Y + self.grass_size * 10))
-                screen.blit(text, text_center)
+                draw_string(font96, "Player 2", orange_color, surface_size / 2,
+                            self.grass_start_Y + self.grass_size * 10)
 
             # 1 & 2 player nicknames
-            text = font96.render(self.player1_name, True, black_color)
-            text_center = text.get_rect(center=(surface_size / 2, self.grass_start_Y + self.grass_size * 7))
-            screen.blit(text, text_center)
-
-            text = font96.render(self.player2_name, True, black_color)
-            text_center = text.get_rect(center=(surface_size / 2, self.grass_start_Y + self.grass_size * 14))
-            screen.blit(text, text_center)
+            draw_string(font96, self.player1_name, black_color, surface_size / 2,
+                        self.grass_start_Y + self.grass_size * 7)
+            draw_string(font96, self.player2_name, black_color, surface_size / 2,
+                        self.grass_start_Y + self.grass_size * 14)
 
             pygame.display.update()  # Update screen
 
@@ -266,9 +259,9 @@ class Game:
         self.draw_grass()  # Update grass
         self.snake1.update_position()  # Update snake position
         self.snake1.draw()  # Draw updated snake
-        self.apples[0].draw()
+        self.apples[0].draw()  # Draw apple
         self.check_apple_collision(self.snake1)  # Check apple collision
-        snake1_collision = self.check_snakes_wall_collision(self.snake1)
+        snake1_collision = self.check_snakes_wall_collision(self.snake1)  # Check snake collision
 
         # TWO_PLAYERS mode
         if self.players_num == Players.TWO_PLAYERS:
@@ -292,6 +285,7 @@ class Game:
         self.game_over_sound.play()  # Play game over sound
         self.background_sound.stop()  # Disable background sound
 
+        # fill name fields, if they are empty
         if self.player1_name == "":
             self.player1_name = "xyz"
 
@@ -300,14 +294,14 @@ class Game:
                 self.player2_name = "xyz"
 
         # Save result to file
-        result = self.player1_name + " " + self.player2_name + " " + str(self.points)
+        result = self.player1_name + " " + self.player2_name + " " + str(self.points) + "\n"
 
         file = None
         if self.players_num == Players.ONE_PLAYER:
             file = open('Results_one_player_mode.txt', 'a')
         elif self.players_num == Players.TWO_PLAYERS:
             file = open('Results_two_players_mode.txt', 'a')
-        file.write(result + "\n")
+        file.write(result)
         file.close()
 
         if self.players_num == Players.ONE_PLAYER:
@@ -315,117 +309,63 @@ class Game:
         elif self.players_num == Players.TWO_PLAYERS:
             file = open('Results_two_players_mode.txt', 'r')
 
-        # Select 3 the best results in particular category
         lines = file.readlines()
         file.close()
 
-        best_results_points = [2, 1, 0]
-        best_results_nicknames = ['xyz xyz', 'xyz xyz', 'xyz xyz']
+        best_results_points = []
+        best_results_nicknames = []
 
+        # Draw 5 best results
         for line in lines:
             one_of_results = line.split()
-            if self.players_num == Players.ONE_PLAYER:
-                one_of_results_points = int(one_of_results[1])
-                if one_of_results_points > best_results_points[0]:
-                    best_results_points[1], best_results_nicknames[1] = best_results_points[0], \
-                                                                        best_results_nicknames[0]
-                    best_results_points[2], best_results_nicknames[2] = best_results_points[1], \
-                                                                        best_results_nicknames[1]
-                    best_results_points[0] = one_of_results_points
-                    best_results_nicknames[0] = one_of_results[0]
-                elif one_of_results_points > best_results_points[1]:
-                    best_results_points[2], best_results_nicknames[2] = best_results_points[1], \
-                                                                        best_results_nicknames[1]
-                    best_results_points[1] = one_of_results_points
-                    best_results_nicknames[1] = one_of_results[0]
-                elif one_of_results_points > best_results_points[2]:
-                    best_results_points[2] = one_of_results_points
-                    best_results_nicknames[2] = one_of_results[0]
-            elif self.players_num == Players.TWO_PLAYERS:
-                one_of_results_points = int(one_of_results[2])
-                if one_of_results_points > best_results_points[0]:
-                    best_results_points[1], best_results_nicknames[1] = best_results_points[0], \
-                                                                        best_results_nicknames[0]
-                    best_results_points[2], best_results_nicknames[2] = best_results_points[1], \
-                                                                        best_results_nicknames[1]
-                    best_results_points[0] = one_of_results_points
-                    best_results_nicknames[0] = one_of_results[0] + " " + one_of_results[1]
-                elif one_of_results_points > best_results_points[1]:
-                    best_results_points[2], best_results_nicknames[2] = best_results_points[1], \
-                                                                        best_results_nicknames[1]
-                    best_results_points[1] = one_of_results_points
-                    best_results_nicknames[1] = one_of_results[0] + " " + one_of_results[1]
-                elif one_of_results_points > best_results_points[2]:
-                    best_results_points[2] = one_of_results_points
-                    best_results_nicknames[2] = one_of_results[0] + " " + one_of_results[1]
 
-        # Show achieved result and 3 the best results
+            if self.players_num == Players.ONE_PLAYER:
+                best_results_points.append(int(one_of_results[1]))
+                best_results_nicknames.append(one_of_results[0])
+            elif self.players_num == Players.TWO_PLAYERS:
+                best_results_points.append(int(one_of_results[2]))
+                best_results_nicknames.append(one_of_results[0] + " " + one_of_results[1])
+
+        for i in range(1, 4):
+            color = black_color
+            if i == 1:
+                color = gold_color
+            if i == 2:
+                color = silver_color
+            if i == 3:
+                color = brown_color
+
+            max_value = max(best_results_points)
+            max_index = best_results_points.index(max_value)
+
+            if self.players_num == Players.ONE_PLAYER:
+                draw_string(font64, str(i) + ".", color, cell_size * 4,
+                            cell_size * 6 + (cell_size + 5) * i * 3)  # Place
+                draw_string(font64, best_results_nicknames[max_index], color, cell_size * 12,
+                            cell_size * 6 + (cell_size + 5) * i * 3)  # Nickname
+                draw_string(font64, str(best_results_points[max_index]), color, cell_size * 20,
+                            cell_size * 6 + (cell_size + 5) * i * 3)  # Score
+            elif self.players_num == Players.TWO_PLAYERS:
+                nicknames = best_results_nicknames[max_index].split()
+                draw_string(font64, str(i) + ".", color, cell_size * 4,
+                            cell_size * 6 + (cell_size + 5) * i * 3)  # Place
+                draw_string(font32, nicknames[0], color, cell_size * 12,
+                            cell_size * 6 - 17 + (cell_size + 5) * i * 3)  # Nickname 1
+                draw_string(font32, nicknames[1], color, cell_size * 12,
+                            cell_size * 6 + 17 + (cell_size + 5) * i * 3)  # Nickname 2
+                draw_string(font64, str(best_results_points[max_index]), color, cell_size * 20,
+                            cell_size * 6 + (cell_size + 5) * i * 3)  # Score
+
+            del best_results_points[max_index]
+            del best_results_nicknames[max_index]
 
         draw_string(font64, "Your result: " + str(self.points), black_color, surface_size / 2,
-                    self.grass_start_Y + self.grass_size * 1)
+                    self.grass_start_Y + self.grass_size * 2)
         draw_string(font64, "TOP SCORES", black_color, surface_size / 2,
-                    self.grass_start_Y + self.grass_size * 4)
-
-        if self.players_num == Players.ONE_PLAYER:
-            # Place 1
-            draw_string(font64, "1.", gold_color, self.grass_start_X + self.grass_size * 2,
-                        self.grass_start_Y + self.grass_size * 7)  # Place
-            draw_string(font64, best_results_nicknames[0], gold_color, self.grass_start_X + self.grass_size * 8,
-                        self.grass_start_Y + self.grass_size * 7)  # Nickname
-            draw_string(font64, str(best_results_points[0]), gold_color, self.grass_start_X + self.grass_size * 17,
-                        self.grass_start_Y + self.grass_size * 7)  # Score
-
-            # Place 2
-            draw_string(font64, "2.", silver_color, self.grass_start_X + self.grass_size * 2,
-                        self.grass_start_Y + self.grass_size * 11)
-            draw_string(font64, best_results_nicknames[1], silver_color, self.grass_start_X + self.grass_size * 8,
-                        self.grass_start_Y + self.grass_size * 11)
-            draw_string(font64, str(best_results_points[1]), silver_color, self.grass_start_X + self.grass_size * 17,
-                        self.grass_start_Y + self.grass_size * 11)
-
-            # Place 3
-            draw_string(font64, "3.", brown_color, self.grass_start_X + self.grass_size * 2,
-                        self.grass_start_Y + self.grass_size * 15)
-            draw_string(font64, best_results_nicknames[2], brown_color, self.grass_start_X + self.grass_size * 8,
-                        self.grass_start_Y + self.grass_size * 15)
-            draw_string(font64, str(best_results_points[2]), brown_color, self.grass_start_X + self.grass_size * 17,
-                        self.grass_start_Y + self.grass_size * 15)
-        elif self.players_num == Players.TWO_PLAYERS:
-            # Place 1
-            nicknames_place_1 = best_results_nicknames[0].split()
-            draw_string(font96, "1.", gold_color, self.grass_start_X + self.grass_size * 2,
-                        self.grass_start_Y + self.grass_size * 7)  # Place
-            draw_string(font64, nicknames_place_1[0], gold_color, self.grass_start_X + self.grass_size * 8,
-                        self.grass_start_Y + self.grass_size * 6)  # Nickname 1
-            draw_string(font64, nicknames_place_1[1], gold_color, self.grass_start_X + self.grass_size * 8,
-                        self.grass_start_Y + self.grass_size * 8)  # Nickname 2
-            draw_string(font96, str(best_results_points[0]), gold_color, self.grass_start_X + self.grass_size * 17,
-                        self.grass_start_Y + self.grass_size * 7)  # Score
-
-            # Place 2
-            nicknames_place_2 = best_results_nicknames[1].split()
-            draw_string(font96, "2.", silver_color, self.grass_start_X + self.grass_size * 2,
-                        self.grass_start_Y + self.grass_size * 11)
-            draw_string(font64, nicknames_place_2[0], silver_color, self.grass_start_X + self.grass_size * 8,
-                        self.grass_start_Y + self.grass_size * 10)
-            draw_string(font64, nicknames_place_2[1], silver_color, self.grass_start_X + self.grass_size * 8,
-                        self.grass_start_Y + self.grass_size * 12)
-            draw_string(font96, str(best_results_points[1]), silver_color, self.grass_start_X + self.grass_size * 17,
-                        self.grass_start_Y + self.grass_size * 11)
-
-            # Place 3
-            nicknames_place_3 = best_results_nicknames[2].split()
-            draw_string(font96, "3.", brown_color, self.grass_start_X + self.grass_size * 2,
-                        self.grass_start_Y + self.grass_size * 15)
-            draw_string(font64, nicknames_place_3[0], brown_color, self.grass_start_X + self.grass_size * 8,
-                        self.grass_start_Y + self.grass_size * 14)
-            draw_string(font64, nicknames_place_3[1], brown_color, self.grass_start_X + self.grass_size * 8,
-                        self.grass_start_Y + self.grass_size * 16)
-            draw_string(font96, str(best_results_points[2]), brown_color, self.grass_start_X + self.grass_size * 17,
-                        self.grass_start_Y + self.grass_size * 15)
+                    self.grass_start_Y + self.grass_size * 5)
 
         # Exit text
-        draw_string(font64, "Exit", red_color, surface_size / 2, self.grass_start_Y + self.grass_size * 19)
+        draw_string(font64, "Exit", red_color, surface_size / 2, self.grass_start_Y + self.grass_size * 18)
 
         pygame.display.update()
         end_of_loop = False
@@ -437,6 +377,21 @@ class Game:
                     if event.key == pygame.K_ESCAPE:  # Back to main menu
                         end_of_loop = True
                     if event.key == pygame.K_RETURN:  # Back to main menu
+                        end_of_loop = True
+
+    def game_pause(self):
+        # Pause text
+        draw_string(font64, "PAUSE", red_color, surface_size / 2, surface_size / 2)
+        pygame.display.update()
+
+        end_of_loop = False
+        while not end_of_loop:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:  # Quit the game
+                    sys.exit()
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE or event.key == pygame.K_p or event.key == pygame.K_RETURN:
+                        # Disable pause
                         end_of_loop = True
 
 
@@ -475,6 +430,8 @@ def game_loop(players: Players):
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:  # Back to main menu
                     end_of_loop = True
+                if event.key == pygame.K_p:  # Pause the game
+                    game.game_pause()
                 # Snake 1 movement
                 if event.key == pygame.K_UP:
                     game.snake1.turn_direction(SnakeDirection.UP)
