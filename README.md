@@ -24,6 +24,3 @@ Small home project of snake game. Project is written in Python language with hel
 - [x] Credits panel implementation
 - [x] Music & Graphics
 - [x] Comments actualization && bug revision
-
-## Video
-<here will be video>
