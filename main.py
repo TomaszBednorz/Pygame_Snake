@@ -2,6 +2,8 @@ import pygame
 from enum import IntEnum
 
 pygame.init()  # Pygame library initialization at the beginning
+pygame.font.init()
+pygame.mixer.init()
 
 # Local imports
 from basic_functionalities import cell_size, surface_size, screen, font96, draw_board, red_color, black_color, \
@@ -49,8 +51,8 @@ if __name__ == "__main__":
     draw_board()
     draw_menu_options(game_state)
 
-    intro_sound = pygame.mixer.Sound('Sound/intro.mp3')
-    intro_sound.play()
+    pygame.mixer.music.load('Sound/intro.mp3')
+    pygame.mixer.music.play()
 
     game_enable = True
 
@@ -71,9 +73,9 @@ if __name__ == "__main__":
                     game_enable = False
                 elif event.key == pygame.K_RETURN:
                     if game_state == GameStates.PLAY_GAME:
-                        intro_sound.stop()
+                        #intro_sound.stop()
                         game_loop(players)
-                        intro_sound.play()
+                        #intro_sound.play()
                     elif game_state == GameStates.RESULTS:
                         results_loop()
                     elif game_state == GameStates.OPTIONS:

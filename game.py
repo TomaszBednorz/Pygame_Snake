@@ -20,7 +20,7 @@ class SnakeDirection(IntEnum):
 class Snake:
     def __init__(self, snake_num: Players):
         self.direction = Vector2(0, -1)
-        self.body = [Vector2(7 * snake_num, 12), Vector2(7 * snake_num, 11), Vector2(7 * snake_num, 10)]
+        self.body = [Vector2(7, 12), Vector2(7 * snake_num, 11), Vector2(7 * snake_num, 10)]
         self.snake_number = snake_num
         self.grass_offset = 60
         self.change_direction = True  # One changing of direction per frame
@@ -46,9 +46,9 @@ class Snake:
                            self.grass_offset + self.body[-1].y * cell_size, cell_size, cell_size)
         pygame.draw.rect(screen, black_color, rect)
 
-        pygame.draw.circle(screen, snake_color, (self.grass_offset + self.body[-1].x * cell_size + cell_size / 2,
-                                                 self.grass_offset + self.body[-1].y * cell_size + cell_size / 2),
-                           cell_size / 2 - 1)
+        pygame.draw.circle(screen, snake_color, (int(self.grass_offset + self.body[-1].x * cell_size + cell_size / 2),
+                                                 int(self.grass_offset + self.body[-1].y * cell_size + cell_size / 2)),
+                           int(cell_size / 2 - 1))
 
     def turn_direction(self, new_direction: SnakeDirection):
         if self.change_direction:
@@ -89,9 +89,9 @@ class Apple:
         self.pos.y = random.randint(0, 19)
 
     def draw(self):
-        pygame.draw.circle(screen, red_color, (self.grass_offset + self.pos.x * cell_size + cell_size / 2,
-                                               self.grass_offset + self.pos.y * cell_size + cell_size / 2),
-                           cell_size / 2 - 1)
+        pygame.draw.circle(screen, red_color, (int(self.grass_offset + self.pos.x * cell_size + cell_size / 2),
+                                               int(self.grass_offset + self.pos.y * cell_size + cell_size / 2)),
+                           int(cell_size / 2 - 1))
 
 
 class Game:
@@ -111,9 +111,9 @@ class Game:
         self.grass_number = 20
 
         # Sounds
-        self.eat_sound = pygame.mixer.Sound('Sound/eat.mp3')
-        self.game_over_sound = pygame.mixer.Sound('Sound/game_over.mp3')
-        self.background_sound = pygame.mixer.Sound('Sound/background.mp3')
+        self.eat_sound = 'Sound/eat.mp3'
+        self.game_over_sound = 'Sound/game_over.mp3'
+        self.background_sound = 'Sound/background.mp3'
 
     def draw_grass(self):
         for i in range(self.grass_number):
@@ -130,7 +130,7 @@ class Game:
         end_of_loop = False
         current_player = Players.ONE_PLAYER  # Player one chooses nickname firstly
 
-        self.background_sound.play()  # Play background sound
+        self.play_music(self.background_sound)  # Play background sound
 
         while not end_of_loop:
             for event in pygame.event.get():
@@ -178,6 +178,14 @@ class Game:
 
         return True  # Nicknames initialized correctly
 
+    def play_music(self, song):
+        pygame.mixer.music.load(song)
+        pygame.mixer.music.play()
+
+    def stop_music(self, song):
+        pygame.mixer.music.load(song)
+        pygame.mixer.music.stop()
+
     def apple_new_position(self, apple_num: int):
         self.apples[apple_num].random_position()
         overlap_snake_1 = True
@@ -213,7 +221,7 @@ class Game:
             self.apples[0].draw()  # Show apple in new position
             snake.grow_up()  # Cover old apple by snake body
             snake.draw()
-            self.eat_sound.play()
+            self.play_music(self.eat_sound)
         # Apple 2
         if snake.body[-1] == self.apples[1].pos:
             self.points += 1
@@ -221,7 +229,7 @@ class Game:
             self.apples[1].draw()
             snake.grow_up()
             snake.draw()
-            self.eat_sound.play()
+            self.play_music(self.eat_sound)
 
     def check_snakes_wall_collision(self, snake: Snake):
         # Wall
@@ -282,8 +290,9 @@ class Game:
         draw_board()
         self.draw_grass()  # Clear the screen
 
-        self.game_over_sound.play()  # Play game over sound
-        self.background_sound.stop()  # Disable background sound
+        self.stop_music(self.background_sound)  # Disable background sound
+        self.play_music(self.game_over_sound)  # Play game over sound
+
 
         # fill name fields, if they are empty
         if self.player1_name == "":
